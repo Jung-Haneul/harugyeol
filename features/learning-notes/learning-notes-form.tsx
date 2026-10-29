@@ -18,7 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 type SectionKey = "reading" | "support";
 
-type Notes = Record<SectionKey, string>;
+type Notes = Record<SectionKey, string> & { references: string[] };
 
 const SECTIONS: { key: SectionKey; title: string }[] = [
   { key: "reading", title: "배움읽기" },
@@ -47,6 +47,7 @@ async function requestNotes(playRecord: string): Promise<Notes> {
   return {
     reading: (body.learningReading as string[]).join("\n"),
     support: (body.learningSupport as string[]).join("\n"),
+    references: (body.references as string[] | undefined) ?? [],
   };
 }
 
@@ -168,6 +169,24 @@ export function LearningNotesForm() {
               </CardFooter>
             </Card>
           ))}
+          {notes.references.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>참고한 누리과정</CardTitle>
+                <CardDescription>
+                  글을 쓸 때 참고한 2019 개정 누리과정의 영역과 내용범주입니다. 복사되는 글에는
+                  포함되지 않습니다.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul aria-label="참고한 누리과정" className="flex flex-col gap-1 text-sm">
+                  {notes.references.map((reference) => (
+                    <li key={reference}>{reference}</li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
         </div>
       )}
     </div>
