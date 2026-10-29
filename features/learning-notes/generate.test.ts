@@ -127,6 +127,16 @@ describe("generateLearningNotes", () => {
     });
   });
 
+  test("Gemini가 요청을 저장하지 않도록 store: false를 보낸다", async () => {
+    const { client, create } = clientReturning(
+      JSON.stringify({ learning_reading: ["a"], learning_support: ["b"] })
+    );
+
+    await generateLearningNotes(RECORD, client);
+
+    expect(create.mock.calls[0][0]).toMatchObject({ store: false });
+  });
+
   test("교사가 쓴 놀이 기록을 모델 입력에 그대로 담아 보낸다", async () => {
     const { client, create } = clientReturning(
       JSON.stringify({ learning_reading: ["a"], learning_support: ["b"] })

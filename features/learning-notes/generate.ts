@@ -166,6 +166,8 @@ export async function generateLearningNotes(
       system_instruction: SYSTEM_INSTRUCTION,
       input: `놀이 기록: ${record}`,
       generation_config: { thinking_level: "low" },
+      // 이전 대화를 이어 쓰지 않으므로, 놀이 기록이 Google 쪽에 남지 않게 저장을 끈다.
+      store: false,
       response_format: {
         type: "text",
         mime_type: "application/json",
