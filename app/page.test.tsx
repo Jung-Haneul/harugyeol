@@ -3,14 +3,12 @@ import { expect, test } from "vitest";
 
 import Home from "@/app/page";
 
-test("홈 화면은 시작 안내 제목과 배포 링크를 보여준다", () => {
+test("홈 화면은 놀이 기록 입력칸과 작성하기 버튼을 보여준다", () => {
   render(<Home />);
 
   expect(
-    screen.getByRole("heading", { level: 1, name: /To get started/i })
+    screen.getByRole("heading", { level: 1, name: "배움읽기·배움지원 작성" })
   ).toBeInTheDocument();
-  expect(screen.getByRole("link", { name: /Deploy Now/i })).toHaveAttribute(
-    "href",
-    expect.stringContaining("vercel.com/new")
-  );
+  expect(screen.getByLabelText("놀이 기록")).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "작성하기" })).toBeInTheDocument();
 });
