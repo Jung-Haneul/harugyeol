@@ -44,3 +44,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - 자동 코드 리뷰는 최대 1회, 가장 낮은 강도(`code-review low`)로만 돌린다. 리뷰어를 못 부르면 그 사실만 적고 완료로 본다.
 - 지적 중 스펙의 수용 기준을 깨거나 주 경로가 실제로 깨지는 것만 고친다. 나머지는 `docs/follow-ups/`에 한 줄로 남긴다. 재리뷰는 하지 않는다.
 - 스펙이 요구하지 않은 보안 하드닝·엣지케이스·성능 방어는 범위 밖이다.
+
+<!-- BEGIN:gemini-api-live-docs -->
+
+# Gemini API 최신 문서
+
+Gemini API(Google AI Studio)를 쓰는 작업을 시작할 때, 코드를 쓰기 전에 공식 문서 `https://ai.google.dev/gemini-api/docs/llms.txt`를 가져와 읽는다. 이 내용을 저장소에 복사하지 않는다. 모델 이름, SDK(`@google/genai`), 무료 구간 한도는 자주 바뀌므로 설치된 버전과 현재 문서를 맞춰 본 뒤 적용한다. 가져오지 못하면 캐시된 기억으로 대신하지 말고 사용자에게 알린다.
+
+<!-- END:gemini-api-live-docs -->
