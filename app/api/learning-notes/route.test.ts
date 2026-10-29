@@ -31,7 +31,11 @@ afterEach(() => {
 
 test("놀이 기록을 받아 배움읽기와 배움지원 및 계획을 돌려준다", async () => {
   create.mockResolvedValue({
-    output_text: JSON.stringify({ learning_reading: ["읽기"], learning_support: ["지원"] }),
+    output_text: JSON.stringify({
+      learning_reading: ["읽기"],
+      learning_support: ["지원"],
+      curriculum_references: ["자연탐구 > 탐구과정 즐기기"],
+    }),
   });
 
   const response = await post({ playRecord: "지문 놀이" });
@@ -40,6 +44,7 @@ test("놀이 기록을 받아 배움읽기와 배움지원 및 계획을 돌려�
   expect(await response.json()).toEqual({
     learningReading: ["읽기"],
     learningSupport: ["지원"],
+    references: ["자연탐구 > 탐구과정 즐기기"],
   });
 });
 

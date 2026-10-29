@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 
 import { LearningNotesForm } from "@/features/learning-notes/learning-notes-form";
@@ -40,6 +40,7 @@ test("놀이 기록을 보내면 배움읽기와 배움지원 및 계획이 줄 
     jsonResponse({
       learningReading: ["지문을 관찰함", "도구를 탐색함"],
       learningSupport: ["돋보기를 제공함", "내일은 지문찾기를 지원해야겠음"],
+      references: ["자연탐구 > 탐구과정 즐기기", "의사소통 > 듣기와 말하기"],
     })
   );
   render(<LearningNotesForm />);
@@ -136,4 +137,38 @@ test("두 덩어리는 따로 복사된다", async () => {
 
   await waitFor(() => expect(writeText).toHaveBeenCalledWith("지원 1\n지원 2"));
   expect(writeText).toHaveBeenCalledTimes(1);
+});
+
+test("참고한 누리과정은 복사되는 글과 따로 목록으로 보여 준다", async () => {
+  fetchMock.mockResolvedValue(
+    jsonResponse({
+      learningReading: ["읽기"],
+      learningSupport: ["지원"],
+      references: ["자연탐구 > 탐구과정 즐기기", "의사소통 > 듣기와 말하기"],
+    })
+  );
+  render(<LearningNotesForm />);
+  writeRecord("지문 놀이를 함");
+  clickGenerate();
+
+  const list = await screen.findByRole("list", { name: "참고한 누리과정" });
+
+  expect(within(list).getAllByRole("listitem").map((item) => item.textContent)).toEqual([
+    "자연탐구 > 탐구과정 즐기기",
+    "의사소통 > 듣기와 말하기",
+  ]);
+  expect(screen.getByLabelText("배움읽기")).toHaveValue("읽기");
+  expect(screen.getByLabelText("배움지원 및 계획")).toHaveValue("지원");
+});
+
+test("참고 항목이 없으면 참고한 누리과정 영역을 보여 주지 않는다", async () => {
+  fetchMock.mockResolvedValue(
+    jsonResponse({ learningReading: ["읽기"], learningSupport: ["지원"], references: [] })
+  );
+  render(<LearningNotesForm />);
+  writeRecord("지문 놀이를 함");
+  clickGenerate();
+  await screen.findByLabelText("배움읽기");
+
+  expect(screen.queryByRole("list", { name: "참고한 누리과정" })).not.toBeInTheDocument();
 });
